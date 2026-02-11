@@ -39,6 +39,26 @@ export const getVerse = async (req, res) => {
   }
 };
 
+// verseController.js
+export const getRandomVerse = async (req, res) => {
+  try {
+    console.log("Random verse request received..."); // Log to see if route is hit
+    
+    // Check if Verse model is correctly imported
+    const randomVerse = await Verse.aggregate([{ $sample: { size: 1 } }]);
+    
+    if (!randomVerse || randomVerse.length === 0) {
+      return res.status(404).json({ message: "No verses found in database" });
+    }
+
+    console.log("Found verse:", randomVerse[0].verseNumber);
+    res.status(200).json(randomVerse[0]);
+  } catch (error) {
+    console.error("Aggregation Error:", error); // This will show the real error in terminal
+    res.status(500).json({ message: "Error fetching shloka", error: error.message });
+  }
+};
+
 // ✅ GET verse with Sanskrit + Hindi + English
 export const getFullVerse = async (req, res) => {
   try {
