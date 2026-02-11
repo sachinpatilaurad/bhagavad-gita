@@ -2,8 +2,11 @@ import dotenv from "dotenv";
 import app from "./app.js";
 import connectDB from "./config/db.js";
 
+import initDailyWisdomJob from "./jobs/dailyWisdomJob.js";
+
 dotenv.config();
 connectDB();
+initDailyWisdomJob();
 
 const PORT = process.env.PORT || 5000;
 

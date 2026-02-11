@@ -6,15 +6,12 @@ import translationRoutes from "./routes/translation.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import aiRoutes from "./routes/ai.routes.js";
 
-import connectDB from "./config/db.js";
-import initDailyWisdomJob from "./jobs/dailyWisdomJob.js";
+
 
 const app = express();
 
 // Connect to Database
-connectDB();
-// Initialize Cron Jobs
-initDailyWisdomJob();
+// Database and Cron jobs are initialized in server.js
 
 app.use(cors());
 app.use(express.json());
