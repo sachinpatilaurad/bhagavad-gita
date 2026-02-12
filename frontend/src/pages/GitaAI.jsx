@@ -1,26 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
-import ReactMarkdown from 'react-markdown';
 import { motion } from "framer-motion";
+import { chatWithGita } from "../services/api";
 
 const GitaAI = () => {
-  const [messages, setMessages] = useState([
-    {
-      role: "assistant",
-      content:
-        "Namaste! I am an AI guided by the wisdom of the Bhagavad Gita. Ask me anything about life, duty, or spirituality.",
-    },
-  ]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const messagesEndRef = useRef(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  // ... (state remains same)
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -32,38 +14,22 @@ const GitaAI = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/ai/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage.content }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessages((prev) => [
-          ...prev,
-          { role: "assistant", content: data.reply },
-        ]);
-      } else {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            content:
-              "I apologize, but I am unable to connect to the divine source at this moment. (" +
-              (data.message || "Unknown error") +
-              ")",
-            error: true,
-          },
-        ]);
-      }
+      const data = await chatWithGita(userMessage.content);
+      
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: data.reply },
+      ]);
     } catch (error) {
+      console.error("AI Chat Error:", error);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: "Something went wrong. Please try again later.",
+          content:
+            "I apologize, but I am unable to connect to the divine source at this moment. (" +
+            (error.response?.data?.message || error.message || "Unknown error") +
+            ")",
           error: true,
         },
       ]);
