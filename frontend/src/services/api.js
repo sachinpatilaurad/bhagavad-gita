@@ -55,3 +55,8 @@ export const subscribe = async (email) => {
   const res = await api.post(`/subscribers/subscribe`, { email });
   return res.data;
 };
+
+export const chatWithGita = async (message) => {
+  const res = await api.post(`/ai/chat`, { message });
+  return res.data; // { reply }
+};

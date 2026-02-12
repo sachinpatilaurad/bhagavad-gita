@@ -1,3 +1,5 @@
+import React, { useState, useRef, useEffect } from "react";
+import ReactMarkdown from 'react-markdown';
 import { motion } from "framer-motion";
 import { chatWithGita } from "../services/api";
 
